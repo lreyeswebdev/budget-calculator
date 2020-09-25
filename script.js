@@ -11,6 +11,7 @@ const itemDesc = document.querySelector("#itemDesc");
 const itemValue = document.querySelector("#itemValue");
 const operator = document.querySelector(".add__type");
 const addBtn = document.querySelector("#addBtn");
+const delBtn = document.querySelector("#delBtn");
 
 const incItems = [];
 const expItems = [];
@@ -102,3 +103,9 @@ function addExpenseItem(list) {
     
     list.insertAdjacentHTML('beforeend', budgetListItem);
 }
+
+
+// Delete from list
+delBtn.addEventListener('click', () => {
+    this.parentNode.removeChild(this);
+});

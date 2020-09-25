@@ -20,6 +20,9 @@ const incomeTotalValue = document.querySelector(".budget__income--value");
 const expenseTotalValue = document.querySelector(".budget__expenses--value");
 const percTotalValue =  document.querySelector(".budget__expenses--percentage");
 
+const incomeList = document.querySelector("#income-list-items");
+const expenseList = document.querySelector("#expense-list-items");
+
 
 // Class declaration
 let BudgetItem = function(operator, description, value) {
@@ -28,22 +31,22 @@ let BudgetItem = function(operator, description, value) {
     this.value = value;
 }
 
+// Event listener
 addBtn.addEventListener('click', () => {
     // Object
-    let newItem = new BudgetItem(operator.value, itemDesc.value, itemValue.value)
+    let newItem = new BudgetItem(operator.value, itemDesc.value, itemValue.value) 
 
     if (operator.value === 'inc') {
-        incItems.push(newItem)
+        incItems.push(newItem);
+        addIncomeItem(incomeList);
     } else { 
         expItems.push(newItem);
+        addExpenseItem(expenseList);
     }
     displayValue();
-    console.log("Income Items: ", incItems);
-    console.log("Expense Items: ", expItems);
-    console.log("Total Income: ", totalValue(incItems));
-    console.log("Total Expense: ", totalValue(expItems));
-    console.log("Total Budget: ", totalBudget());
-    console.log("Total Percentage of Expense: ", calcPercentage());
+    // clears input form
+    itemDesc.value = "";
+    itemValue.value = "";        
 });
 
 // Get total values in arrays
@@ -63,7 +66,7 @@ function totalBudget() {
 
 // Calculate percentage of total expenses from total income
 function calcPercentage() {
-    totalPercentage = ((totalValue(expItems)/totalValue(incItems)) * 100);
+    totalPercentage = Math.round((totalValue(expItems)/totalValue(incItems)) * 100);
     return totalPercentage + "%";
 }
 
@@ -75,3 +78,27 @@ function displayValue() {
     percTotalValue.innerHTML = calcPercentage();
 }
 
+
+// Add items
+function addIncomeItem(list) {
+    let budgetListItem = `<li class="list-item">
+    <div class="item__description">${itemDesc.value}</div>
+    <div class="item__value">${itemValue.value}</div>
+    <div class="item__delete"><button id="delBtn" class="item_delete--btn">X</button></div>
+    </li>
+    `;
+    
+    list.insertAdjacentHTML('beforeend', budgetListItem);
+}
+
+function addExpenseItem(list) {
+    let budgetListItem = `<li class="list-item">
+    <div class="item__description">${itemDesc.value}</div>
+    <div class="item__value">${itemValue.value}</div>
+    <div class="item__percentage">${Math.round((itemValue.value/totalValue(incItems)) * 100) + "%"}</div>
+    <div class="item__delete"><button class="item__delete--btn">X</button></div>
+    </li>
+    `;
+    
+    list.insertAdjacentHTML('beforeend', budgetListItem);
+}

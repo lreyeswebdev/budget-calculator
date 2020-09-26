@@ -11,7 +11,6 @@ const itemDesc = document.querySelector("#itemDesc");
 const itemValue = document.querySelector("#itemValue");
 const operator = document.querySelector(".add__type");
 const addBtn = document.querySelector("#addBtn");
-const delBtn = document.querySelector("#delBtn");
 
 const incItems = [];
 const expItems = [];
@@ -35,7 +34,7 @@ let BudgetItem = function(operator, description, value) {
 // Event listener
 addBtn.addEventListener('click', () => {
     // Object
-    let newItem = new BudgetItem(operator.value, itemDesc.value, itemValue.value) 
+    let newItem = new BudgetItem(operator.value, itemDesc.value, itemValue.value)     
 
     if (operator.value === 'inc') {
         incItems.push(newItem);
@@ -47,7 +46,22 @@ addBtn.addEventListener('click', () => {
     displayValue();
     // clears input form
     itemDesc.value = "";
-    itemValue.value = "";        
+    itemValue.value = "";
+
+    console.log("Income Items: ", incItems);
+    console.log("Expense Items: ", expItems);
+
+    // Deletes item from HTML
+    const delBtn = document.querySelectorAll(".item_delete--btn");
+    
+    console.log(delBtn);
+
+    for (let i = 0; i < delBtn.length; i++) {
+        delBtn[i].addEventListener('click', (evt) => {    
+            console.log(evt.target)
+            evt.target.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode);
+        });
+    }    
 });
 
 // Get total values in arrays
@@ -82,10 +96,10 @@ function displayValue() {
 
 // Add items
 function addIncomeItem(list) {
-    let budgetListItem = `<li class="list-item">
+    let budgetListItem = `<li>
     <div class="item__description">${itemDesc.value}</div>
     <div class="item__value">${itemValue.value}</div>
-    <div class="item__delete"><button id="delBtn" class="item_delete--btn">X</button></div>
+    <div class="item__delete"><button class="item_delete--btn">X</button></div>
     </li>
     `;
     
@@ -97,15 +111,10 @@ function addExpenseItem(list) {
     <div class="item__description">${itemDesc.value}</div>
     <div class="item__value">${itemValue.value}</div>
     <div class="item__percentage">${Math.round((itemValue.value/totalValue(incItems)) * 100) + "%"}</div>
-    <div class="item__delete"><button class="item__delete--btn">X</button></div>
+    <div class="item__delete"><button class="item_delete--btn">X</button></div>
     </li>
     `;
     
     list.insertAdjacentHTML('beforeend', budgetListItem);
 }
 
-
-// Delete from list
-delBtn.addEventListener('click', () => {
-    this.parentNode.removeChild(this);
-});
